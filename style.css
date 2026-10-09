@@ -6,3 +6,18 @@
     body {
      font-family: "Inter", sans-serif;
     }
+.gallery-slide {
+    flex-shrink: 0;
+    overflow: hidden;
+    
+  }
+
+  .gallery-slide img {
+    display: block;
+    transition: transform 1s ease;
+    height: 90%;
+  }
+
+  .gallery-slide:hover img {
+    transform: scale(1.04);
+  }

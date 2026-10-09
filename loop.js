@@ -2,7 +2,7 @@
   const gallerySlider = document.getElementById("gallerySlider");
 
   let position = 0;
-  let speed = 0.6;
+  let speed = 1;
   let animationId;
 
   function animateGallery() {
@@ -35,7 +35,7 @@
   });
 
   gallerySlider.addEventListener("mouseleave", () => {
-    speed = 0.6;
+    speed = 1;
   });
 
 
@@ -47,7 +47,7 @@
   }, { passive: true });
 
   gallerySlider.addEventListener("touchend", () => {
-    speed = 0.6;
+    speed = 1;
   }, { passive: true });
 
 
@@ -57,4 +57,55 @@
   window.addEventListener("resize", () => {
     position = 0;
     gallerySlider.style.transform = "translate3d(0, 0, 0)";
+  });
+
+
+  //lightbox effect
+  const lightbox = document.getElementById("galleryLightbox");
+  const lightboxImage = document.getElementById("lightboxImage");
+  const closeLightbox = document.getElementById("closeLightbox");
+
+  // Open lightbox when any gallery image is clicked
+  gallerySlider.querySelectorAll("img").forEach((image) => {
+    image.addEventListener("click", () => {
+      lightboxImage.src = image.src;
+      lightboxImage.alt = image.alt;
+
+      lightbox.classList.remove("hidden");
+      lightbox.classList.add("flex");
+
+      // Stop the gallery while viewing an image
+      speed = 0;
+
+      document.body.style.overflow = "hidden";
+      closeLightbox.focus();
+    });
+  });
+
+  // Close lightbox
+  function hideLightbox() {
+    lightbox.classList.add("hidden");
+    lightbox.classList.remove("flex");
+
+    lightboxImage.src = "";
+    document.body.style.overflow = "";
+
+    // Resume gallery movement
+    speed = 1;
+  }
+
+  closeLightbox.addEventListener("click", hideLightbox);
+
+  // Close when clicking the dark background
+  lightbox.addEventListener("click", (event) => {
+    if (event.target === lightbox) {
+      hideLightbox();
+    }
+  });
+
+  // Close with Escape key
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !lightbox.classList.contains("hidden")) {
+      hideLightbox();
+    }
   });
